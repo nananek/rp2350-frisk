@@ -1,0 +1,4 @@
+(version 1)
+
+# No custom DRC rules.  The board uses the project defaults:
+# 0.15 mm clearance, 0.1 mm minimum track, 0.5/0.3 mm vias.
