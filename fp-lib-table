@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "PICO2")(type "KiCad")(uri "${KIPRJMOD}/lib/PICO2.pretty")(options "")(descr "pico2-compat footprints"))
+)

@@ -1,0 +1,52 @@
+name: kicad
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check-and-fab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pull KiCad 10
+        run: docker pull kicad/kicad:10.0
+
+      - name: ERC
+        run: |
+          docker run --rm --user 0:0 -v "$PWD:/work" -w /work \
+            kicad/kicad:10.0 \
+            kicad-cli sch erc --severity-all --exit-code-violations \
+            -o /work/erc.rpt pico2-compat.kicad_sch
+          cat erc.rpt
+
+      - name: DRC
+        run: |
+          docker run --rm --user 0:0 -v "$PWD:/work" -w /work \
+            kicad/kicad:10.0 \
+            kicad-cli pcb drc --severity-error --exit-code-violations \
+            -o /work/drc.rpt pico2-compat.kicad_pcb
+          cat drc.rpt
+
+      - name: Fabrication outputs
+        run: ./scripts/kicad.sh ./scripts/export_fab.sh
+
+      - name: Check exported files
+        run: |
+          test -s fab/bom_jlcpcb.csv
+          test -s fab/cpl_jlcpcb.csv
+          test -s fab/pico2-compat-gerbers.zip
+          unzip -l fab/pico2-compat-gerbers.zip | grep -q 'Edge_Cuts'
+          unzip -l fab/pico2-compat-gerbers.zip | grep -q 'F_Cu'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pico2-compat-jlcpcb
+          path: |
+            fab/bom_jlcpcb.csv
+            fab/cpl_jlcpcb.csv
+            fab/pico2-compat-gerbers.zip
+            fab/docs/schematic.pdf
+            fab/docs/pcb_top.pdf
+            fab/docs/pcb_bottom.pdf
