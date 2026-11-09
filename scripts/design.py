@@ -195,7 +195,7 @@ part("U1", "RP2350A", "RP2350A",
     "6": P1V1, "7": "GPIO4", "8": "GPIO5", "9": "GPIO6", "10": "GPIO7",
     "11": P3V3, "12": "GPIO8", "13": "GPIO9", "14": "GPIO10", "15": "GPIO11",
     "16": "PIO_DP", "17": "PIO_DM", "18": "GPIO14", "19": "GPIO15", "20": P3V3,
-    "21": "XIN", "22": "XOUT", "23": None, "24": "SWCLK", "25": "SWDIO",
+    "21": "XIN", "22": "XOUT", "23": P1V1, "24": "SWCLK", "25": "SWDIO",
     "26": "RUN", "27": "GPIO16", "28": "GPIO17", "29": "GPIO18", "30": P3V3,
     "31": "GPIO19", "32": "GPIO20", "33": "GPIO21", "34": "GPIO22",
     "35": None, "36": None, "37": None, "38": P3V3, "39": P1V1,
@@ -349,6 +349,8 @@ cap("C11", "4.7uF", P1V1, GND, "C_0805_2012Metric", "C1779")
 cap("C12", "100nF", P1V1, GND)
 cap("C13", "4.7uF", "VREG_AVDD", GND, "C_0805_2012Metric", "C1779")
 cap("C14", "100nF", "VREG_AVDD", GND)
+# Second bulk capacitor on the DVDD pin furthest from the regulator (pin 23).
+cap("C30", "4.7uF", P1V1, GND, "C_0805_2012Metric", "C1779")
 
 # IOVDD / QSPI / USB OTP / flash / CH343 / ADC decoupling
 for i in range(15, 25):
