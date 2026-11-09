@@ -42,7 +42,6 @@ PLACE = {
     "SW1": (4.0, 24.2, 0),
     "SW2": (53.8, 24.3, 0),
     "D1": (49.0, 16.5, 180),
-    "D2": (14.0, 22.0, 180),
     "D3": (38.0, 22.0, 180),
     "D4": (49.0, 6.0, 180),
     "D5": (8.0, 22.0, 180),
@@ -57,7 +56,7 @@ PLACE = {
     "R8": (46.0, 13.5, 0),
     "R9": (10.5, 17.5, 0),
     "R10": (13.0, 17.5, 0),
-    "R11": (8.0, 17.5, 0),
+    "R11": (8.2, 13.8, 0),
     "R12": (17.5, 21.0, 0),
     "R13": (49.0, 21.0, 0),
     "R14": (40.0, 6.0, 0),
@@ -345,7 +344,7 @@ class Builder:
         text("RUN", 53.8, 26.5, 0.7, 0.11)
 
         # warnings / notes
-        text("PIO USB: 1.5k D+ pull-up fitted - device mode only", 30.0, 10.0, 0.55, 0.08, layer=pcbnew.B_SilkS)
+        text("PIO USB: HOST port, 5V from NATIVE USB", 30.0, 10.0, 0.55, 0.08, layer=pcbnew.B_SilkS)
         text("VSYS 3.8-5.5V for 3.3V LDO", 30.0, 12.0, 0.55, 0.08, layer=pcbnew.B_SilkS)
 
         # pin 1 marker for the header
