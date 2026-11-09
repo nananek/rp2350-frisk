@@ -289,9 +289,9 @@ def main():
     notes = [
         ("Pico 2 header: pin 1 = GP0 at the native-USB end; 2.54 mm pitch, 17.78 mm row spacing.", 30, 40),
         ("UART0: GP0 (TX, pin 1) -> CH343P RXD (pin 5); CH343P TXD (pin 4) -> GP1 (RX, pin 2).", 30, 47),
-        ("PIO USB: GP12 (pin 16) = D+, GP13 (pin 17) = D-, 22 ohm series, 1.5k D+ pull-up (device only).", 30, 54),
+        ("PIO USB: GP12 (pin 16) = D+, GP13 (pin 17) = D-, 22 ohm series; HOST port (CC 56k Rp, VBUS from NATIVE USB).", 30, 54),
         ("Native USB: RP2350 USB_DP/USB_DM, 27 ohm series, USBLC6 ESD.", 30, 61),
-        ("Power: each Type-C VBUS is diode-ORed to VSYS; AP2112K-3.3 makes 3V3.", 30, 68),
+        ("Power: NATIVE/UART VBUS are diode-ORed to VSYS; AP2112K-3.3 makes 3V3. PIO VBUS is an output from NATIVE VBUS.", 30, 68),
         ("BOOT: QSPI_SS --1k--> button --> GND. RUN: RUN --1k--> button --> GND.", 30, 75),
     ]
     for text, x, y in notes:

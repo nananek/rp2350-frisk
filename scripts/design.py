@@ -6,7 +6,8 @@ with:
 
 * the same 57.6 x 31.4 mm outline as nananek/serial-km-emulator,
 * a Pico-compatible 2x20 GPIO header (2.54 mm pitch, 17.78 mm row spacing),
-* three USB Type-C ports (native RP2350 USB, CH343P UART, PIO USB),
+* three USB Type-C ports (native RP2350 USB and CH343P UART are devices,
+  PIO USB on GP12/GP13 is a host),
 * separate BOOT and RUN buttons,
 * a 3.3 V LDO and the RP2350 internal 1.1 V regulator.
 
@@ -231,7 +232,7 @@ part("J1", "TYPE-C-31-M-12", "USB_C", "USB_C_Receptacle_HRO_TYPE-C-31-M-12", "C1
     "A6": "USB_DP_CONN", "B6": "USB_DP_CONN", "A7": "USB_DM_CONN", "B7": "USB_DM_CONN",
     "A8": None, "B8": None,
 })
-# J2 = PIO USB on GP12/GP13 (bottom long edge, left)
+# J2 = PIO USB host on GP12/GP13 (bottom long edge, left)
 part("J2", "TYPE-C-31-M-12", "USB_C", "USB_C_Receptacle_HRO_TYPE-C-31-M-12", "C165948", {
     "A4": "VBUS_PIO", "A9": "VBUS_PIO", "B4": "VBUS_PIO", "B9": "VBUS_PIO",
     "A1": GND, "A12": GND, "B1": GND, "B12": GND, "SH": GND,
@@ -272,8 +273,10 @@ part("J4", "DEBUG", "DEBUG", "PinHeader_1x03_P2.54mm_Vertical", "",
      {"1": "SWCLK", "2": GND, "3": "SWDIO"}, fitted=False)
 
 # --- power OR and ESD ------------------------------------------------------
+# D1 / D3 feed VSYS from the two device ports.  J2 is a host port, so its
+# VBUS is an output: 0R at R11 links VBUS_PIO to the native port's VBUS.
+# There is deliberately no VBUS_PIO -> VSYS diode any more (D2 was removed).
 part("D1", "BAT54WS", "D", "D_SOD-323", "C22629", {"2": "VBUS_NATIVE", "1": VSYS})
-part("D2", "BAT54WS", "D", "D_SOD-323", "C22629", {"2": "VBUS_PIO", "1": VSYS})
 part("D3", "BAT54WS", "D", "D_SOD-323", "C22629", {"2": "VBUS_UART", "1": VSYS})
 
 for ref, vbus, dp, dm in (
@@ -286,19 +289,29 @@ for ref, vbus, dp, dm in (
     })
 
 # --- CC resistors ----------------------------------------------------------
+# J1 / J3 are device ports: Rd (5.1k to GND) marks them as UFP/sink.
 for ref, cc in (
     ("R1", "CC1_NATIVE"), ("R2", "CC2_NATIVE"),
-    ("R3", "CC1_PIO"), ("R4", "CC2_PIO"),
     ("R5", "CC1_UART"), ("R6", "CC2_UART"),
 ):
     part(ref, "5.1k", "R", "R_0603_1608Metric", "C23186", {"1": cc, "2": GND})
 
-# --- USB series resistors and PIO pull-up ----------------------------------
+# J2 is a host (source) port: Rp (56k to VBUS) advertises default USB power.
+part("R3", "56k", "R", "R_0603_1608Metric", "C23206",
+     {"1": "CC1_PIO", "2": "VBUS_PIO"})
+part("R4", "56k", "R", "R_0603_1608Metric", "C23206",
+     {"1": "CC2_PIO", "2": "VBUS_PIO"})
+
+# --- USB series resistors --------------------------------------------------
+# PIO USB is a host port, so there is no D+ pull-up; the RP2350/Pico-PIO-USB
+# enables the D+/D- pull-downs internally.  R11 is now the VBUS link: 0R from
+# the native USB VBUS to the PIO VBUS (full 5 V, no diode drop).
 part("R7", "27", "R", "R_0603_1608Metric", "C25190", {"1": "USB_DP_CONN", "2": "USB_DP"})
 part("R8", "27", "R", "R_0603_1608Metric", "C25190", {"1": "USB_DM_CONN", "2": "USB_DM"})
 part("R9", "22", "R", "R_0603_1608Metric", "C23345", {"1": "PIO_DP_CONN", "2": "PIO_DP"})
 part("R10", "22", "R", "R_0603_1608Metric", "C23345", {"1": "PIO_DM_CONN", "2": "PIO_DM"})
-part("R11", "1.5k", "R", "R_0603_1608Metric", "C22843", {"1": "PIO_DP_CONN", "2": P3V3})
+part("R11", "0", "R", "R_0603_1608Metric", "C21189",
+     {"1": "VBUS_NATIVE", "2": "VBUS_PIO"})
 
 # --- boot / run / ADC / regulator ------------------------------------------
 part("R12", "1k", "R", "R_0603_1608Metric", "C21190", {"1": "QSPI_SS", "2": "BOOT_SW"})
