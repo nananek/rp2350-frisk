@@ -97,6 +97,7 @@ PLACE = {
     "C27": (33.5, 23.0, 0),
     "C28": (22.0, 22.0, 0),
     "C29": (29.0, 15.0, 0),
+    "C30": (35.0, 17.0, 0),
     "LED1": (24.0, 22.5, 180),
     "LED2": (26.0, 22.5, 180),
 }# Pin labels for the Pico header: pin number -> short label.
@@ -113,7 +114,7 @@ HEADER_LABELS = {
 # Large parts are placed by hand.  Every other part is packed by a small
 # rectangle allocator so that courtyards and solder-mask openings do not
 # collide on this crowded 57.6 x 31.4 mm board.
-FIXED = {"U1", "U2", "U3", "U4", "J1", "J2", "J3", "J4", "J5A", "J5B", "Y1", "SW1", "SW2"}
+FIXED = {"U1", "U2", "U3", "U4", "J1", "J2", "J3", "J4", "J5A", "J5B", "Y1", "SW1", "SW2", "C30"}
 
 # Conservative keep-out boxes for the fixed parts (board mm).
 FIXED_BOX = {
@@ -130,6 +131,7 @@ FIXED_BOX = {
     "U4": (19.8, 21.4, 24.2, 25.0),
     "J4": (23.5, 27.0, 33.6, 30.0),
     "Y1": (25.3, 11.2, 29.7, 14.8),
+    "C30": (32.8, 15.9, 37.2, 18.1),
 }
 
 # Allowed centre regions for the packed parts.
